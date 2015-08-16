@@ -1,5 +1,5 @@
 # ISD-stations
-Visualization of the `Integrated Surface Database station history <ftp://ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.txt>`_
+Visualization of the [Integrated Surface Database station history] (ftp://ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.txt)
 
 
 Done:
