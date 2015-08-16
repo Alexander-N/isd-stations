@@ -1,6 +1,8 @@
-# ISD-stations
-Visualization of the [Integrated Surface Database station history] (ftp://ftp.ncdc.noaa.gov/pub/data/noaa/isd-history.txt)
+ISD-stations
+============
+Visualization of the [Integrated Surface Database station history](/parse_data/isd-history.txt)
 
+Check it out: http://alexander-n.github.io/ISD-stations/
 
 Done:
  * Geolocation
@@ -10,8 +12,8 @@ Done:
 
 Todo:
  * Refactor code to make it readable
+ * Add buttons for zooming
  * Add year sliding with the red point in graph
- * Display recorded data from station on on click
  * Display country names
  * Add scale which responds to zoom
- * Add buttons for zoom
+ * Display recorded data from station on click
