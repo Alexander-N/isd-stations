@@ -41,7 +41,7 @@ function plotLine(nStarted, nEnded, width, height) {
     var yearsAndSums = d3.zip(years, sums);
 
     // add the line chart
-    var x = d3.time.scale()
+    var x = d3.scale.linear()
         .range([70, width-10])
         .domain([1900, 2015]);
 
@@ -239,6 +239,17 @@ function draw(geoData) {
         }
         d3.select("button.graph")
             .on("click", toggleGraph);
+
+
+        //Add drag behaviour for red circle in graph
+        var drag = d3.behavior.drag()
+            .on("drag", function(d,i) {
+                year = Math.round(svgLine.x.invert(d3.event.x));
+                if (year >= 1900 && year <= 2015) {
+                    update(year);
+                }
+            });
+        svgLine.select("circle").call(drag);
 
         animationButton
             .on("click", toggleAnimation);
