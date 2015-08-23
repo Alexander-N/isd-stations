@@ -23,7 +23,6 @@ function nestCount(key, weatherStations){
             return d.length;
         })
         .map(weatherStations);
-    //maybe put them into an object?
     return [stationsByYear, nStations];
 }
 
@@ -105,9 +104,6 @@ function updateLine(svgLine, year) {
     svgLine.select("circle")
         .attr("cx", svgLine.x(year))
         .attr("cy", svgLine.y(svgLine.nStations[year-1900]));
-        //.transition()
-        //.duration(300)
-        //.ease("linear");
 }
 
 function getActiveStations(stationsStart, stationsEnd) {
@@ -153,17 +149,17 @@ function draw(geoData) {
 
 
     var projection = d3.geo.mercator()
-                        .scale(scale*4.4)
-                        .translate([width / 2.6, height*1.58]);
+        .scale(scale*4.4)
+        .translate([width / 2.6, height*1.58]);
 
     var path = d3.geo.path().projection(projection);
 
     var map = gMap.selectAll("path")
-                .data(geoData.features)
-                .enter()
-                .append("path")
-                .attr("class", "countries")
-                .attr('d', path);
+        .data(geoData.features)
+        .enter()
+        .append("path")
+        .attr("class", "countries")
+        .attr('d', path);
 
     gMap.style("stroke-width", "0.9px");
     var gCircles = gMap.append("g");
@@ -173,11 +169,10 @@ function draw(geoData) {
         gCircles.selectAll("circle")
             .attr("r", circleRadius + "px");
         gMap.style("stroke-width", (0.9 / ((0.5*d3.event.scale) + 0.5)) + "px");
-        gMap
-            .attr(
-                "transform",
-                "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
-            );
+        gMap.attr(
+            "transform",
+            "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
+        );
     }
 
     var zoomListener = d3.behavior.zoom()
@@ -256,10 +251,15 @@ function draw(geoData) {
         }
 
         function animation() {
-            if((runAnimation === true) && (year < 2016)) {
-                update(year);
-                year++;
-                setTimeout(animation, 300);
+            if (runAnimation === true) {
+                if (year <= 2015) {
+                    update(year);
+                    year++;
+                    setTimeout(animation, 300);
+                } else {
+                    runAnimation = false;
+                    animationButton.text("Start");
+                }
             }
         }
 
@@ -284,8 +284,8 @@ function draw(geoData) {
         }
 
         function mouseOut(d,i) {
-                    tooltip.classed("hidden", true);
-                    d3.select(this).attr("r", circleRadius + "px");
+            tooltip.classed("hidden", true);
+            d3.select(this).attr("r", circleRadius + "px");
         }
 
         function getId(d) { return d.id; }
