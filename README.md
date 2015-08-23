@@ -11,7 +11,7 @@ Done:
  * Display name on hover
 
 Todo:
- * Refactor code to make it readable
+ * Refactoring
  * Add buttons for zooming
  * Add year sliding with the red point in graph
  * Display country names

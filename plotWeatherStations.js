@@ -4,9 +4,9 @@ function setYear(year) {
     d3.select("h2")
         .text(year);
     d3.select("#output-slider")
-    	.text(year);
+        .text(year);
     d3.select("#year-slider")
-    	.property("value", year);
+        .property("value", year);
 }
 
 function nestCount(key, weatherStations){
@@ -18,7 +18,7 @@ function nestCount(key, weatherStations){
     var stationsByYear = nest
         .map(weatherStations);
 
-    var nStations = nest 
+    var nStations = nest
         .rollup(function(d){
             return d.length;
         })
@@ -58,7 +58,7 @@ function plotLine(nStarted, nEnded, width, height) {
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left");
-        
+
     var line = d3.svg.line()
         .x(function(d) { return x(d[0]); })
         .y(function(d) { return y(d[1]); });
@@ -77,7 +77,7 @@ function plotLine(nStarted, nEnded, width, height) {
         .attr("class", "y axis")
         .attr("transform", "translate(70,0)")
         .call(yAxis)
-      .append("text")
+        .append("text")
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
@@ -102,7 +102,7 @@ function plotLine(nStarted, nEnded, width, height) {
 }
 
 function updateLine(svgLine, year) {
-	svgLine.select("circle")
+    svgLine.select("circle")
         .attr("cx", svgLine.x(year))
         .attr("cy", svgLine.y(svgLine.nStations[year-1900]));
         //.transition()
@@ -116,19 +116,19 @@ function getActiveStations(stationsStart, stationsEnd) {
     for(var year = 1900; year<2016; year++) {
         if(year in stationsStart) {
             Array.prototype.push.apply(
-            	currentlyActiveStations, stationsStart[year]
+                currentlyActiveStations, stationsStart[year]
             );
         }
         if(year in stationsEnd){
             currentlyActiveStations = currentlyActiveStations.filter(
-            	function(d){
-                	return stationsEnd[year].indexOf(d) === -1;
-            	}
+                function(d){
+                    return stationsEnd[year].indexOf(d) === -1;
+                }
             );
-    	}
+        }
         activeStations[year] = currentlyActiveStations.slice();
     }
-	return activeStations;
+    return activeStations;
 }
 
 function draw(geoData) {
@@ -141,64 +141,63 @@ function draw(geoData) {
         .attr("width", width)
         .attr("height", height);
 
-	var tooltip = d3.select("div#map")
-		.append("div")
-		.attr("class", "tooltip hidden");
+    var tooltip = d3.select("div#map")
+        .append("div")
+        .attr("class", "tooltip hidden");
 
     var gMap  = svg
         .append("g")
         .attr("class", "map");
 
-	var circleRadius = scale/100;
+    var circleRadius = scale/100;
 
 
     var projection = d3.geo.mercator()
-                           .scale(scale*4.4)
-                           .translate([width / 2.6, height*1.58]);
+                        .scale(scale*4.4)
+                        .translate([width / 2.6, height*1.58]);
 
-	var path = d3.geo.path().projection(projection);
+    var path = d3.geo.path().projection(projection);
 
     var map = gMap.selectAll("path")
-                 .data(geoData.features)
-                 .enter()
-                 .append("path")
-                 .attr("class", "countries")
-                 .attr('d', path)
+                .data(geoData.features)
+                .enter()
+                .append("path")
+                .attr("class", "countries")
+                .attr('d', path);
 
     gMap.style("stroke-width", "0.9px");
-    var gCircles = gMap
-    				.append("g");
+    var gCircles = gMap.append("g");
 
-	function zoom() {
-		circleRadius = scale/100 / ((0.5*d3.event.scale) + 0.5);
-		gCircles.selectAll("circle")
-        	.attr("r", circleRadius + "px");
+    function zoom() {
+        circleRadius = scale/100 / ((0.5*d3.event.scale) + 0.5);
+        gCircles.selectAll("circle")
+            .attr("r", circleRadius + "px");
         gMap.style("stroke-width", (0.9 / ((0.5*d3.event.scale) + 0.5)) + "px");
-		gMap
-			.attr(
-				"transform",
-			    "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
-			);
-	}
+        gMap
+            .attr(
+                "transform",
+                "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
+            );
+    }
 
-	var zoomListener = d3.behavior.zoom()
-      .translate([0, 0])
-	  .scale(1)
-	  .on("zoom", zoom); 
+    var zoomListener = d3.behavior.zoom()
+        .translate([0, 0])
+        .scale(1)
+        .on("zoom", zoom);
 
-	zoomListener(svg);
-	d3.csv("europe.csv", function(d) {
-		return {
+    zoomListener(svg);
+    d3.csv("europe.csv", function(d) {
+        return {
             id : d.USAF,
             name : d["STATION NAME"],
             coordinates : projection([+d.LON, +d.LAT]),
             start_year : +d.BEGIN.slice(0,4),
             end_year : +d.END.slice(0,4)
         };
-	},
-	processData);
+    },
+    processData);
 
-	function processData(weatherStations){
+    function processData(weatherStations){
         var stations = nestCount("start_year", weatherStations);
         var stationsStart = stations[0],
         nStarted = stations[1];
@@ -212,85 +211,86 @@ function draw(geoData) {
         var svgLine = plotLine(nStarted, nEnded, width, height);
         svgLine.classed("hidden", true);
         var activeStations = getActiveStations(stationsStart, stationsEnd);
-	    var year = 1900;
+        var year = 1900;
 
-		d3.select("#year-slider").on("mousemove", function(e){
-			year = this.value;
-			update(year);
-		});
+        d3.select("#year-slider").on("mousemove", function(e){
+            year = this.value;
+            update(year);
+        });
 
-		var runAnimation = false;
+        var runAnimation = false;
 
-		var animationButton = d3.select("button.animation");
+        var animationButton = d3.select("button.animation");
 
-	    function toggleAnimation() { 
-	    	if (runAnimation === true) {
-	    		runAnimation = false;
-	    		animationButton.text("Start");
-	    	}
-	    	else if (runAnimation === false) {
-	    		runAnimation = true;
-	    		animationButton.text("Stop");
-	    		animation();
-	    	}
-	    }
+        function toggleAnimation() {
+            if (runAnimation === true) {
+                runAnimation = false;
+                animationButton.text("Start");
+            }
+            else if (runAnimation === false) {
+                runAnimation = true;
+                animationButton.text("Stop");
+                animation();
+            }
+        }
 
-	    function toggleGraph() {
-	    	if (svgLine.classed("hidden")) {
-	    		svgLine.classed("hidden", false);
-	    	}
-	    	else {
-	    		svgLine.classed("hidden", true);
-	    	}
-	    }
-	    d3.select("button.graph")
-	    	.on("click", toggleGraph);
+        function toggleGraph() {
+            if (svgLine.classed("hidden")) {
+                svgLine.classed("hidden", false);
+            }
+            else {
+                svgLine.classed("hidden", true);
+            }
+        }
+        d3.select("button.graph")
+            .on("click", toggleGraph);
 
-	    animationButton
-	    	.on("click", toggleAnimation);
+        animationButton
+            .on("click", toggleAnimation);
 
 
-	    function update(year) {
-		    setYear(year);
-		    updateLine(svgLine, year);
+        function update(year) {
+            setYear(year);
+            updateLine(svgLine, year);
             repaint(gCircles, year, activeStations[year]);
-	    }
+        }
 
         function animation() {
             if((runAnimation === true) && (year < 2016)) {
-            	update(year);
-		        year++;
-		        setTimeout(animation, 300);
-	        }
+                update(year);
+                year++;
+                setTimeout(animation, 300);
+            }
         }
 
-		function mouseIn(d,i) {
-		 	//offsets for tooltips
-			var offsetL = document.getElementById("map").offsetLeft+15;
-			var offsetT = document.getElementById("map").offsetTop+10;
+        function mouseIn(d,i) {
+             //offsets for tooltips
+            var offsetL = document.getElementById("map").offsetLeft+15;
+            var offsetT = document.getElementById("map").offsetTop+10;
 
-		    var mouse = d3.mouse(
-		    	svg.node()).map( function(d) { return parseInt(d); } 
-		    );
-		    var left = mouse[0]+offsetL;
-		    var top = mouse[1]+offsetT;
-		    tooltip.classed("hidden", false)
-		           .attr(
-		           		"style",
-		           		"left:" + left + "px;top:" + top +"px"
-		           	)
-		           .html(d.name);
-		    d3.select(this).attr("r", circleRadius*4 + "px");
-		}
+            var mouse = d3.mouse(
+                svg.node()).map( function(d) { return parseInt(d); }
+            );
+            var left = mouse[0]+offsetL;
+            var top = mouse[1]+offsetT;
+            tooltip
+                .classed("hidden", false)
+                .attr(
+                    "style",
+                    "left:" + left + "px;top:" + top +"px"
+                )
+                .html(d.name);
+            d3.select(this).attr("r", circleRadius*4 + "px");
+        }
 
-		function mouseOut(d,i) {
-			        tooltip.classed("hidden", true);
-				    d3.select(this).attr("r", circleRadius + "px");
-		}
+        function mouseOut(d,i) {
+                    tooltip.classed("hidden", true);
+                    d3.select(this).attr("r", circleRadius + "px");
+        }
 
-		function getId(d) { return d.id; }
-		function getLong(d) { return d.coordinates[0]; }
-		function getLat(d) { return d.coordinates[1]; }
+        function getId(d) { return d.id; }
+        function getLong(d) { return d.coordinates[0]; }
+        function getLat(d) { return d.coordinates[1]; }
 
         function repaint(gCircles, year, currentlyActiveStations) {
             var circles = gCircles.selectAll("circle")
@@ -311,7 +311,7 @@ function draw(geoData) {
 
             newCircles
                 .on("mousemove", mouseIn)
-			    .on("mouseout",  mouseOut);
+                .on("mouseout",  mouseOut);
         }
     }
 }
