@@ -244,7 +244,11 @@ function draw(geoData) {
         //Add click and drag behaviour for red circle in graph
         function mouseToYear(mouseCoordinate) {
             year = Math.round(svgLine.x.invert(mouseCoordinate));
-            if (year >= 1900 && year <= 2015) {
+            if (year < 1900) {
+                update(1900);
+            } else if (year > 2015) {
+                update(2015);
+            } else {
                 update(year);
             }
         }
