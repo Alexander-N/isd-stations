@@ -7,7 +7,11 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/1.3.3/rangeslider.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/1.3.3/rangeslider.min.css">
     <script>
-      $('input[type="range"]').rangeslider();
+    $(document).ready(function() {
+        $(".year-slider").each(function(e) {
+            $(this).rangeslider();
+        });
+    });
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -22,7 +26,7 @@
     <div id="page-content">
     <h1>Integrated Surface Database Weather Stations</h1>
     <p class="subtitle">in Europe without Russia</p>
-    <h2>1900</h2>	
+    <h2>1900</h2>
     <div id="map"></div>
     <div id="chart"></div>
     <script type="text/javascript">
@@ -34,7 +38,7 @@
      <button type="button" class="graph btn btn-default">Graph</button>
        <p>
          Year:
-         <input type="range" min="1900", max="2015", step="1", value="1900" id="year-slider"/>
+         <input type="range" min="1900", max="2015", step="1", value="1900" id="year-slider" class="year-slider"/>
          <output id="output-slider">1900</output
        </p>
     </div>

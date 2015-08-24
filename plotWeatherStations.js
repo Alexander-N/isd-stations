@@ -81,7 +81,7 @@ function plotLine(nStarted, nEnded, width, height) {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .attr("transform", "rotate(-90)")
-        .text("Number of Weather-Stations");
+        .text("Number of Weather Stations");
 
     svgLine.append("path")
         .datum(yearsAndSums)
