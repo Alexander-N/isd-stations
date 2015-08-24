@@ -241,13 +241,20 @@ function draw(geoData) {
             .on("click", toggleGraph);
 
 
-        //Add drag behaviour for red circle in graph
+        //Add click and drag behaviour for red circle in graph
+        function mouseToYear(mouseCoordinate) {
+            year = Math.round(svgLine.x.invert(mouseCoordinate));
+            if (year >= 1900 && year <= 2015) {
+                update(year);
+            }
+        }
         var drag = d3.behavior.drag()
             .on("drag", function(d,i) {
-                year = Math.round(svgLine.x.invert(d3.event.x));
-                if (year >= 1900 && year <= 2015) {
-                    update(year);
-                }
+                mouseToYear(d3.event.x);
+            });
+        svgLine
+            .on("click", function(d,i) {
+                mouseToYear(d3.mouse(svgLine.node())[0]);
             });
         svgLine.select("circle").call(drag);
 
