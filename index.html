@@ -2,22 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <!-- Polyfill for <input type="range"> -->
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/1.3.3/rangeslider.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/1.3.3/rangeslider.min.css">
-    <script>
-    $(document).ready(function() {
-        $(".year-slider").each(function(e) {
-            $(this).rangeslider();
-        });
-    });
-    </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <!-- D3 -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
-
     <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript" src="plotWeatherStations.js"></script>
     <title>Integrated Surface Database Weather Stations</title>
@@ -38,7 +26,7 @@
      <button type="button" class="graph btn btn-default">Graph</button>
        <p>
          Year:
-         <input type="range" min="1900", max="2015", step="1", value="1900" id="year-slider" class="year-slider"/>
+         <input type="range" min="1900", max="2015", step="1", value="1900" id="year-slider"/>
          <output id="output-slider">1900</output
        </p>
     </div>
