@@ -1,8 +1,8 @@
-ISD-stations
+isd-stations
 ============
 Visualization of the [Integrated Surface Database station history](/parse_data/isd-history.txt)
 
-Check it out: http://alexander-n.github.io/ISD-stations/
+Check it out: http://alexander-n.github.io/isd-stations/
 
 Done:
  * Geolocation
