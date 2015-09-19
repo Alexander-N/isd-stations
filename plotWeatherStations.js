@@ -9,6 +9,40 @@ function setYear(year) {
         .property("value", year);
 }
 
+function Countries(width, height, scale, geoData) {
+    var svg = d3.select("div#map")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("id", "svg-map")
+    var g = svg
+        .append("g")
+    var projection = d3.geo.mercator()
+        .scale(scale*4.4)
+        .translate([width / 2.6, height*1.58]);
+    var path = d3.geo.path().projection(projection);
+
+    g.selectAll("path")
+        .data(geoData.features)
+        .enter()
+        .append("path")
+        .attr("class", "countries")
+        .attr('d', path);
+    g.style("stroke-width", "0.9");
+
+    this.projection = projection;
+    this.g = g;
+    this.svg = svg;
+
+    this.zoom = function() {
+        g.style("stroke-width", (0.9 / ((0.5*d3.event.scale) + 0.5)));
+        g.attr(
+            "transform",
+            "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
+        );
+    };
+}
+
 function LinePlot(width, height, nStations) {
     var x = d3.scale.linear()
         .range([70, width-10])
@@ -67,8 +101,11 @@ function LinePlot(width, height, nStations) {
 
     this.svg = svg;
 
-    this.update = function(year) {
+    this.update = function(year, duration) {
         circle
+        .transition()
+        .duration(duration)
+        .ease("linear")
         .attr("cx", x(year))
         .attr("cy", y(nStations[year]));
     };
@@ -200,16 +237,18 @@ function Interaction(stationCircles, linePlot){
         animationButton
             .on("click", toggleAnimation);
 
-        function update(year) {
+        function update(year, duration) {
+            duration = (typeof duration === 'undefined') ? 0 : duration;
             setYear(year);
-            linePlot.update(year);
+            linePlot.update(year, duration);
             stationCircles.update(year);
         }
 
         function animation() {
+            var duration = 300;
             if (runAnimation === true) {
                 if (year <= 2015) {
-                    update(year);
+                    update(year, duration);
                     year++;
                     setTimeout(animation, 300);
                 } else {
@@ -219,40 +258,6 @@ function Interaction(stationCircles, linePlot){
             }
         }
 
-}
-
-function Countries(width, height, scale, geoData) {
-    var svg = d3.select("div#map")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("id", "svg-map")
-    var g = svg
-        .append("g")
-    var projection = d3.geo.mercator()
-        .scale(scale*4.4)
-        .translate([width / 2.6, height*1.58]);
-    var path = d3.geo.path().projection(projection);
-
-    g.selectAll("path")
-        .data(geoData.features)
-        .enter()
-        .append("path")
-        .attr("class", "countries")
-        .attr('d', path);
-    g.style("stroke-width", "0.9");
-
-    this.projection = projection;
-    this.g = g;
-    this.svg = svg;
-
-    this.zoom = function() {
-        g.style("stroke-width", (0.9 / ((0.5*d3.event.scale) + 0.5)));
-        g.attr(
-            "transform",
-            "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
-        );
-    };
 }
 
 function nestByProperty(property, weatherStations) {
