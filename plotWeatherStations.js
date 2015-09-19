@@ -171,21 +171,25 @@ function StationCircles(gCircles, circleRadius) {
             .attr("cy", getLat);
 
         if (duration > 0 ) {
-        newCircles
-            .attr("r", 0)
-            .transition()
-            .duration(duration)
-            .ease("linear")
-            .attr("r", circleRadius*3);
-        newCircles
-            .transition()
-            .delay(duration)
-            .duration(duration)
-            .ease("linear")
+            newCircles
+                .attr("r", 0)
+                .transition()
+                .duration(duration)
+                .ease("linear")
+                .attr("r", circleRadius*3);
+            newCircles
+                .transition()
+                .delay(duration)
+                .duration(duration)
+                .ease("linear")
+                .attr("r", circleRadius);
+        // set the current radius (scrolling)
+        gCircles.selectAll("circle")
             .attr("r", circleRadius);
+        } else {
+            newCircles
+                .attr("r", circleRadius);
         }
-        newCircles
-            .attr("r", circleRadius);
 
         newCircles
             .on("mousemove", function(d, i) {
@@ -194,6 +198,8 @@ function StationCircles(gCircles, circleRadius) {
             .on("mouseout", function(d, i){
                 mouseOut(this);
             });
+
+
     };
 
     this.zoom = function() {
