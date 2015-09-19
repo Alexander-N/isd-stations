@@ -14,9 +14,9 @@ function Countries(width, height, scale, geoData) {
         .append("svg")
         .attr("width", width)
         .attr("height", height)
-        .attr("id", "svg-map")
+        .attr("id", "svg-map");
     var g = svg
-        .append("g")
+        .append("g");
     var projection = d3.geo.mercator()
         .scale(scale*4.4)
         .translate([width / 2.6, height*1.58]);
@@ -139,7 +139,7 @@ function StationCircles(gCircles, circleRadius) {
                 "left:" + left + "px;top:" + top + "px"
             )
             .html(stationName);
-        d3.select(circle).attr("r", circleRadius*4);
+        d3.select(circle).attr("r", circleRadius*3);
     }
 
     function mouseOut(circle) {
@@ -153,7 +153,7 @@ function StationCircles(gCircles, circleRadius) {
     function getLong(d) { return d.coordinates[0]; }
     function getLat(d) { return d.coordinates[1]; }
 
-    this.update = function(year) {
+    this.update = function(year, duration) {
         var currentlyActiveStations = this.activeStations[year];
         var circles = gCircles.selectAll("circle")
             .data(currentlyActiveStations, getId);
@@ -164,11 +164,25 @@ function StationCircles(gCircles, circleRadius) {
 
         var newCircles = circles
             .enter()
-            .append("circle");
-
-        newCircles
+            .append("circle")
             .attr("cx", getLong)
-            .attr("cy", getLat)
+            .attr("cy", getLat);
+
+        if (duration > 0 ) {
+        newCircles
+            .attr("r", 0)
+            .transition()
+            .duration(duration)
+            .ease("linear")
+            .attr("r", circleRadius*3);
+        newCircles
+            .transition()
+            .delay(duration)
+            .duration(duration)
+            .ease("linear")
+            .attr("r", circleRadius);
+        }
+        newCircles
             .attr("r", circleRadius);
 
         newCircles
@@ -241,7 +255,7 @@ function Interaction(stationCircles, linePlot){
             duration = (typeof duration === 'undefined') ? 0 : duration;
             setYear(year);
             linePlot.update(year, duration);
-            stationCircles.update(year);
+            stationCircles.update(year, duration*2);
         }
 
         function animation() {
@@ -334,7 +348,7 @@ function draw(geoData) {
     function processData(weatherStations){
         var stationsStarted = nestByProperty("start_year", weatherStations);
         var stationsEnded = nestByProperty("end_year", weatherStations);
-        //stations with the field END:2015 are currently running
+        // stations with the field END:2015 are currently running
         stationsEnded[2015] = [];
         var nStations = getNumberOfStations(stationsStarted, stationsEnded);
         var linePlot = new LinePlot(width, height, nStations);
