@@ -9,11 +9,10 @@ Done:
  * Number of stations over time
  * Zooming
  * Display name on hover
- * Add year sliding with the red point in graph
+ * Year sliding with the red point in graph
 
 Todo:
- * Refactoring
- * Add buttons for zooming
+ * Buttons for zooming
  * Display country names
  * Add scale which responds to zoom
  * Display recorded data from station on click

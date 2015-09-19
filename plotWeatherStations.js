@@ -1,12 +1,13 @@
 "use strict";
 
-function setYear(year) {
-    d3.select("h2")
+function setYearAndNumber(year, number) {
+    d3.selectAll(".year")
         .text(year);
-    d3.select("#output-slider")
-        .text(year);
+    d3.selectAll(".number-of-stations")
+        .text(number);
     d3.select("#year-slider")
         .property("value", year);
+
 }
 
 function Countries(width, height, scale, geoData) {
@@ -100,6 +101,7 @@ function LinePlot(width, height, nStations) {
         .attr("id", "line");
 
     this.svg = svg;
+    this.nStations = nStations;
 
     this.update = function(year, duration) {
         circle
@@ -253,7 +255,7 @@ function Interaction(stationCircles, linePlot){
 
         function update(year, duration) {
             duration = (typeof duration === 'undefined') ? 0 : duration;
-            setYear(year);
+            setYearAndNumber(year, linePlot.nStations[year]);
             linePlot.update(year, duration);
             stationCircles.update(year, duration*2);
         }
