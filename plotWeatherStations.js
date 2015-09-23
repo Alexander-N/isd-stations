@@ -127,8 +127,8 @@ function StationCircles(gCircles, circleRadius) {
         .attr("class", "tooltip hidden");
 
     function mouseIn(circle, stationName) {
-         //offsets for tooltips
         var divMap = document.getElementById("map");
+        //offsets for tooltips
         var offsetL = divMap.offsetLeft+15;
         var offsetT = divMap.offsetTop+10;
         var mouse = d3.mouse(d3.select("#svg-map").node());
@@ -259,7 +259,7 @@ function Interaction(stationCircles, linePlot) {
             .on("click", toggleAnimation);
 
         function update(year, duration) {
-            duration = (typeof duration === 'undefined') ? 0 : duration;
+            duration = (typeof duration === "undefined") ? 0 : duration;
             setYearAndNumber(year, linePlot.nStations[year]);
             linePlot.update(year, duration);
             stationCircles.update(year, duration*2);
@@ -291,8 +291,9 @@ function nestByProperty(property, weatherStations) {
 }
 
 function getNumberOfStations(stationsStarted, stationsEnded) {
-    var sum = 0,
-        nStations = {};
+    var sum = 0;
+
+    var nStations = {};
     for(var year=1900; year<2016; year++) {
         sum += (stationsStarted[year] || []).length;
         sum -= (stationsEnded[year] || []).length;
@@ -302,8 +303,8 @@ function getNumberOfStations(stationsStarted, stationsEnded) {
 }
 
 function getActiveStations(stationsStart, stationsEnd) {
-    var activeStations = {},
-        currentlyActiveStations = [];
+    var activeStations = {};
+    var currentlyActiveStations = [];
     for(var year = 1900; year<2016; year++) {
         if(year in stationsStart) {
             Array.prototype.push.apply(
@@ -323,12 +324,12 @@ function getActiveStations(stationsStart, stationsEnd) {
 }
 
 function draw(geoData) {
-    var scale = 115,
-        width = 750 * scale / 120,
-        height = 600 * scale / 120,
-        map = new Countries(width, height, scale, geoData),
-        gCircles = map.g.append("g"),
-        stationCircles = new StationCircles(gCircles, scale/100);
+    var scale = 115;
+    var width = 750 * scale / 120;
+    var height = 600 * scale / 120;
+    var map = new Countries(width, height, scale, geoData);
+    var gCircles = map.g.append("g");
+    var stationCircles = new StationCircles(gCircles, scale/100);
 
     function zoom() {
         stationCircles.zoom();
@@ -348,12 +349,11 @@ function draw(geoData) {
             start_year : +d.BEGIN.slice(0,4),
             end_year : +d.END.slice(0,4)
         };
-    },
-    processData);
+    }, processData);
 
     function processData(weatherStations){
-        var stationsStarted = nestByProperty("start_year", weatherStations),
-            stationsEnded = nestByProperty("end_year", weatherStations);
+        var stationsStarted = nestByProperty("start_year", weatherStations);
+        var stationsEnded = nestByProperty("end_year", weatherStations);
         // stations with the field END:2015 are currently running
         stationsEnded[2015] = [];
         var nStations = getNumberOfStations(stationsStarted, stationsEnded);
