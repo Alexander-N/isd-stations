@@ -7,7 +7,6 @@ function setYearAndNumber(year, number) {
         .text(number);
     d3.select("#year-slider")
         .property("value", year);
-
 }
 
 function Countries(width, height, scale, geoData) {
@@ -88,7 +87,9 @@ function LinePlot(width, height, nStations) {
         .text("Number of Weather Stations");
 
     var years = Object.keys(nStations).sort();
-    var yearsAndSums = years.map(function(year){ return [year, nStations[year]]; });
+    var yearsAndSums = years.map(function(year) {
+       return [year, nStations[year]];
+    });
     svg.append("path")
         .datum(yearsAndSums)
         .attr("class", "line")
@@ -183,9 +184,9 @@ function StationCircles(gCircles, circleRadius) {
                 .duration(duration)
                 .ease("linear")
                 .attr("r", circleRadius);
-        // set the current radius (scrolling)
-        gCircles.selectAll("circle")
-            .attr("r", circleRadius);
+            // set the current radius (scrolling)
+            gCircles.selectAll("circle")
+                .attr("r", circleRadius);
         } else {
             newCircles
                 .attr("r", circleRadius);
@@ -195,11 +196,9 @@ function StationCircles(gCircles, circleRadius) {
             .on("mousemove", function(d, i) {
                 mouseIn(this, d.name);
             })
-            .on("mouseout", function(d, i){
+            .on("mouseout", function(d, i) {
                 mouseOut(this);
             });
-
-
     };
 
     this.zoom = function() {
@@ -209,7 +208,7 @@ function StationCircles(gCircles, circleRadius) {
     };
 }
 
-function Interaction(stationCircles, linePlot){
+function Interaction(stationCircles, linePlot) {
         linePlot.svg.classed("hidden", true);
         var year = 1900;
         d3.select("#year-slider").on("mousemove", function(e){
@@ -287,14 +286,13 @@ function nestByProperty(property, weatherStations) {
         .key(function(d) {
             return d[property];
         });
-    var stationsByProperty = nest
-        .map(weatherStations);
+    var stationsByProperty = nest.map(weatherStations);
     return stationsByProperty;
 }
 
 function getNumberOfStations(stationsStarted, stationsEnded) {
-    var sum = 0;
-    var nStations = {};
+    var sum = 0,
+        nStations = {};
     for(var year=1900; year<2016; year++) {
         sum += (stationsStarted[year] || []).length;
         sum -= (stationsEnded[year] || []).length;
@@ -304,8 +302,8 @@ function getNumberOfStations(stationsStarted, stationsEnded) {
 }
 
 function getActiveStations(stationsStart, stationsEnd) {
-    var activeStations = {};
-    var currentlyActiveStations = [];
+    var activeStations = {},
+        currentlyActiveStations = [];
     for(var year = 1900; year<2016; year++) {
         if(year in stationsStart) {
             Array.prototype.push.apply(
@@ -325,12 +323,12 @@ function getActiveStations(stationsStart, stationsEnd) {
 }
 
 function draw(geoData) {
-    var scale = 115;
-    var width = 750 * scale / 120,
-        height = 600 * scale / 120;
-    var map = new Countries(width, height, scale, geoData);
-    var gCircles = map.g.append("g");
-    var stationCircles = new StationCircles(gCircles, scale/100);
+    var scale = 115,
+        width = 750 * scale / 120,
+        height = 600 * scale / 120,
+        map = new Countries(width, height, scale, geoData),
+        gCircles = map.g.append("g"),
+        stationCircles = new StationCircles(gCircles, scale/100);
 
     function zoom() {
         stationCircles.zoom();
@@ -354,13 +352,15 @@ function draw(geoData) {
     processData);
 
     function processData(weatherStations){
-        var stationsStarted = nestByProperty("start_year", weatherStations);
-        var stationsEnded = nestByProperty("end_year", weatherStations);
+        var stationsStarted = nestByProperty("start_year", weatherStations),
+            stationsEnded = nestByProperty("end_year", weatherStations);
         // stations with the field END:2015 are currently running
         stationsEnded[2015] = [];
         var nStations = getNumberOfStations(stationsStarted, stationsEnded);
         var linePlot = new LinePlot(width, height, nStations);
-        stationCircles.activeStations = getActiveStations(stationsStarted, stationsEnded);
+        stationCircles.activeStations = getActiveStations(
+            stationsStarted, stationsEnded
+        );
         Interaction(stationCircles, linePlot);
     }
 }
