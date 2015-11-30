@@ -10,9 +10,9 @@ Done:
  * Zooming
  * Display name on hover
  * Year sliding with the red point in graph
+ * Buttons for zooming
 
 Todo:
- * Buttons for zooming
  * Display country names
  * Add scale which responds to zoom
  * Display recorded data from station on click

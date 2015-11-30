@@ -14,7 +14,12 @@
     <div id="page-content">
     <h1>Integrated Surface Database Weather Stations</h1>
     <h3><span class="year">1900</span>: <span class="number-of-stations">0</span> stations</h3>
-    <div id="map"></div>
+    <div id="map">
+      <div id="station-tooltip" class="tooltip hidden"></div>
+      <div class="zoom-buttons">
+        <button id="zoom-in" class="btn btn-default">+</button><button id="zoom-out" class="btn btn-default">-</button>
+      </div>
+    </div>
     <div id="chart"></div>
     <script type="text/javascript">
       d3.json("europe.json", draw);
@@ -27,10 +32,10 @@
      <p>
        Year:
        <input class="year" type="range" min="1900", max="2015", step="1", value="1900" id="year-slider"/>
-       <output id="output-slider">1900</output
+       <output class="year">1900</output
      </p>
     </div>
-    <a href="https://github.com/Alexander-N/ISD-stations"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+    <a href="https://github.com/Alexander-N/isd-stations"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
     <div>
   </body>
 </html>

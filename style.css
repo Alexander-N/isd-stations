@@ -25,6 +25,7 @@ svg, canvas {
 }
 div#map, div#chart {
   display: inline-block;
+  position: relative;
 }
 div#map > svg {
     background: rgba(58,132,223,0.7);
@@ -68,7 +69,7 @@ input[type=range] {
 p {
   margin: 20px;
 }
-div.tooltip {
+.tooltip {
   color: #222;
   background: #fff;
   padding: .5em;
@@ -80,4 +81,15 @@ div.tooltip {
 }
 .hidden {
   display: none;
+}
+.zoom-buttons {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+.zoom-buttons > button {
+  padding: 1px;
+  height: 30px;
+  width: 30px;
+  font-weight: bold;
 }
