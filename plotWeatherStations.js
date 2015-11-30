@@ -120,6 +120,11 @@ function LinePlot(width, height, nStations) {
 
 }
 
+function getMapOffset() {
+    var divMap = document.getElementById("map");
+    return [divMap.offsetLeft, divMap.offsetTop];
+}
+
 function StationCircles(gCircles, circleRadius) {
 
     var tooltip = d3.select("div#map")
@@ -127,13 +132,10 @@ function StationCircles(gCircles, circleRadius) {
         .attr("class", "tooltip hidden");
 
     function mouseIn(circle, stationName) {
-        var divMap = document.getElementById("map");
-        //offsets for tooltips
-        var offsetL = divMap.offsetLeft+15;
-        var offsetT = divMap.offsetTop+10;
         var mouse = d3.mouse(d3.select("#svg-map").node());
-        var left = mouse[0]+offsetL;
-        var top = mouse[1]+offsetT;
+        var offset = getMapOffset();
+        var left = mouse[0]+offset[0]+15;
+        var top = mouse[1]+offset[1]+10;
 
         tooltip
             .classed("hidden", false)
@@ -209,7 +211,6 @@ function StationCircles(gCircles, circleRadius) {
 }
 
 function Interaction(stationCircles, linePlot) {
-        linePlot.svg.classed("hidden", true);
         var year = 1900;
         d3.select("#year-slider").on("mousemove", function(e){
             year = this.value;
@@ -302,19 +303,19 @@ function getNumberOfStations(stationsStarted, stationsEnded) {
     return nStations;
 }
 
-function getActiveStations(stationsStart, stationsEnd) {
+function getActiveStations(stationsStarted, stationsEnded) {
     var activeStations = {};
     var currentlyActiveStations = [];
     for(var year = 1900; year<2016; year++) {
-        if(year in stationsStart) {
+        if(year in stationsStarted) {
             Array.prototype.push.apply(
-                currentlyActiveStations, stationsStart[year]
+                currentlyActiveStations, stationsStarted[year]
             );
         }
-        if(year in stationsEnd){
+        if(year in stationsEnded){
             currentlyActiveStations = currentlyActiveStations.filter(
                 function(d){
-                    return stationsEnd[year].indexOf(d) === -1;
+                    return stationsEnded[year].indexOf(d) === -1;
                 }
             );
         }
@@ -361,6 +362,6 @@ function draw(geoData) {
         stationCircles.activeStations = getActiveStations(
             stationsStarted, stationsEnded
         );
-        Interaction(stationCircles, linePlot);
+        new Interaction(stationCircles, linePlot);
     }
 }
